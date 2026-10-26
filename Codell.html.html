@@ -1,0 +1,364 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Codell</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<style>
+/* Layout concept: Codell builds websites, so the page builds one in front of you. A hero with a restylable site mock, a scroll-scrubbed process where the mock goes from wireframe to live, a moving word band, then a plain contact close. Flat tone steps, no rules, no gradients. */
+:root{
+  --ground:#EDF1EE;
+  --surface:#DDE5E0;
+  --ink:#0D1916;
+  --ink-soft:#33443F;
+  --accent:#1F4FFF;
+  --on-accent:#FFFFFF;
+  --font-display:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;
+  --font-body:"Hanken Grotesk","Helvetica Neue",Arial,sans-serif;
+  --ease:cubic-bezier(0.23,1,0.32,1);
+  --gap-section:clamp(88px,12vw,180px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0B1311;--surface:#14201C;--ink:#E9F1ED;--ink-soft:#A9BBB4;
+  --accent:#6C93FF;--on-accent:#0B1311;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ground:#0B1311;--surface:#14201C;--ink:#E9F1ED;--ink-soft:#A9BBB4;
+  --accent:#6C93FF;--on-accent:#0B1311;color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:18px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1320px;margin-inline:auto}
+h1,h2,h3{font-family:var(--font-display);font-weight:800;letter-spacing:-0.035em;line-height:0.98;margin:0;text-wrap:balance}
+h1{font-size:clamp(48px,10vw,148px);letter-spacing:-0.045em;line-height:0.92}
+h2{font-size:clamp(36px,5.6vw,80px)}
+h3{font-size:clamp(24px,2.6vw,34px);line-height:1.05}
+p{margin:0;max-width:60ch}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+::selection{background:var(--accent);color:var(--on-accent)}
+.w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.1em;margin-bottom:-.1em}
+.w>span{display:inline-block}
+
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:20px}
+.mark{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:800;font-size:26px;letter-spacing:-0.04em;text-decoration:none}
+.glyph{width:22px;height:22px;background:var(--accent);clip-path:polygon(0 0,70% 0,100% 30%,100% 100%,0 100%)}
+nav{display:flex;align-items:center;gap:clamp(14px,3vw,36px)}
+nav a.link{text-decoration:none;font-weight:500;font-size:16px;padding:6px 0}
+nav a.link:hover{color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:var(--on-accent);
+  font:600 17px/1 var(--font-body);padding:17px 26px;border:0;border-radius:0;text-decoration:none;cursor:pointer;
+  transition:transform 160ms var(--ease)}
+.btn:active{transform:scale(0.97)}
+.btn.small{padding:12px 18px;font-size:15px}
+.btn.quiet{background:var(--surface);color:var(--ink)}
+@media (hover:hover) and (pointer:fine){.btn:hover{transform:translateY(-2px)}.btn:active{transform:scale(0.97)}}
+@media (max-width:760px){nav a.link{display:none}}
+
+/* hero */
+.hero{padding-top:clamp(36px,7vw,96px)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(32px,5vw,80px);margin-top:clamp(40px,5vw,72px);align-items:start}
+.hero-copy{display:flex;flex-direction:column;gap:32px}
+.hero-copy p{font-size:clamp(19px,1.7vw,24px);line-height:1.4}
+.actions{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+@media (max-width:900px){.hero-grid{grid-template-columns:minmax(0,1fr)}}
+.feel{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:16px}
+.feel-label{font-weight:600;margin-right:8px}
+.chip{font:600 15px var(--font-body);background:var(--surface);color:var(--ink);border:0;border-radius:0;padding:11px 18px;cursor:pointer;transition:background-color 160ms var(--ease),color 160ms var(--ease)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--ground)}
+@media (hover:hover) and (pointer:fine){.chip[aria-pressed="false"]:hover{background:var(--accent);color:var(--on-accent)}}
+
+/* the site mock: a picture of a website, so it carries its own colours */
+.site{--s-bg:#E4EDE8;--s-ink:#0D1916;--s-acc:#1F4FFF;--s-on:#fff;--s-r:0px;
+  background:var(--s-bg);color:var(--s-ink);border-radius:var(--s-r);overflow:hidden;min-width:0;
+  transition:background-color 400ms var(--ease),color 400ms var(--ease),border-radius 400ms var(--ease)}
+.site[data-feel="bold"]{--s-bg:#0D1916;--s-ink:#FFFFFF;--s-acc:#FFD400;--s-on:#0D1916}
+.site[data-feel="playful"]{--s-bg:#FCE4EC;--s-ink:#2A0A18;--s-acc:#E0245E;--s-on:#fff;--s-r:28px}
+.site[data-stage="1"]{--s-bg:#ECECEC;--s-ink:#4A4A4A;--s-acc:#BDBDBD;--s-on:#BDBDBD;--s-r:0px}
+.site[data-stage="2"]{--s-ink:#4A4A4A}
+.s-bar{display:flex;align-items:center;gap:6px;padding:12px 16px;background:color-mix(in srgb,var(--s-ink) 10%,var(--s-bg))}
+.s-bar i{width:10px;height:10px;border-radius:50%;background:color-mix(in srgb,var(--s-ink) 35%,var(--s-bg))}
+.s-bar span{margin-left:10px;font-size:13px;opacity:.7}
+.s-body{position:relative;padding:clamp(16px,2.6vw,32px);display:grid;gap:clamp(16px,2.4vw,28px)}
+.s-nav{display:flex;align-items:center;gap:clamp(10px,2vw,22px);font-size:14px}
+.s-nav b{font:800 18px var(--font-display);margin-right:auto;letter-spacing:-0.03em}
+.s-pill{background:var(--s-acc);color:var(--s-on);padding:8px 14px;border-radius:calc(var(--s-r) / 2.5);font-weight:600;transition:background-color 400ms var(--ease)}
+.s-hero{display:grid;gap:12px}
+.s-title{font:800 clamp(24px,3.4vw,44px)/1 var(--font-display);letter-spacing:-0.035em;max-width:14ch}
+.s-hero p{font-size:clamp(13px,1.2vw,16px);max-width:34ch}
+.s-btn{justify-self:start;background:var(--s-acc);color:var(--s-on);padding:12px 18px;font-weight:600;font-size:14px;border-radius:calc(var(--s-r) / 2.5);transition:background-color 400ms var(--ease)}
+.s-img{position:relative;height:clamp(70px,10vw,150px);background:var(--s-acc);border-radius:calc(var(--s-r) / 1.6);overflow:hidden;transition:background-color 400ms var(--ease)}
+.s-img::after{content:"";position:absolute;right:8%;top:18%;width:min(40%,120px);aspect-ratio:1;border-radius:50%;background:var(--s-bg);opacity:.9}
+.s-badge{position:absolute;right:clamp(28px,4vw,48px);bottom:clamp(28px,4vw,48px);background:var(--s-ink);color:var(--s-bg);padding:6px 12px;font:600 13px var(--font-body);border-radius:99px;
+  transition:transform 400ms var(--ease),opacity 400ms var(--ease)}
+.site[data-stage="1"] .s-badge,.site[data-stage="2"] .s-badge,.site[data-stage="3"] .s-badge{opacity:0;transform:scale(.8)}
+.site[data-stage="1"] .t,.site[data-stage="2"] .t{color:transparent;background:color-mix(in srgb,var(--s-ink) 16%,transparent);border-radius:4px}
+.site[data-stage="1"] .s-pill,.site[data-stage="1"] .s-btn{color:transparent}
+.site[data-stage="1"] .s-img::after{opacity:0}
+.site[data-stage="1"] .s-img,.site[data-stage="1"] .s-pill,.site[data-stage="1"] .s-btn{background:#CFCFCF}
+.t{transition:color 400ms var(--ease),background-color 400ms var(--ease)}
+
+/* sections */
+section{padding-top:var(--gap-section)}
+.split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,6vw,96px);align-items:start}
+@media (max-width:900px){.split{grid-template-columns:minmax(0,1fr)}}
+.stack{display:flex;flex-direction:column;gap:16px}
+.panel{background:var(--surface);padding:clamp(24px,3vw,44px);display:grid;gap:12px}
+.panel p{font-size:19px}
+.panel:nth-child(2){margin-left:clamp(0px,6vw,96px)}
+.panel:nth-child(3){margin-left:clamp(0px,12vw,192px)}
+
+/* process: scroll scrubs the mock from wireframe to live */
+.process{height:340vh;padding-top:var(--gap-section)}
+.pin{position:sticky;top:0;min-height:100svh;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(24px,5vw,80px);align-items:center;padding-block:24px}
+.p-text{display:grid;gap:clamp(20px,3vw,40px)}
+.steps{display:grid}
+.step{grid-area:1/1;display:grid;gap:14px;align-content:start}
+.step p{font-size:clamp(18px,1.8vw,22px);max-width:36ch}
+.step h3{font-size:clamp(40px,5.4vw,80px);letter-spacing:-0.04em}
+.anim .step{opacity:0;transform:translateY(24px);transition:opacity 350ms var(--ease),transform 500ms var(--ease);pointer-events:none}
+.anim .step.on{opacity:1;transform:none;pointer-events:auto}
+.prog{display:flex;gap:8px}
+.prog i{flex:1;height:10px;background:var(--surface);position:relative;overflow:hidden}
+.prog i b{position:absolute;inset:0;background:var(--accent);transform:scaleX(0);transform-origin:left}
+.p-mock{min-width:0}
+@media (max-width:900px){
+  .process{height:420vh}
+  .pin{grid-template-columns:minmax(0,1fr);align-content:center;gap:20px}
+  .step h3{font-size:clamp(34px,10vw,52px)}
+  .step p{font-size:17px}
+}
+@media (prefers-reduced-motion:reduce),(max-width:0px){}
+html:not(.anim) .process{height:auto}
+html:not(.anim) .pin{position:static;min-height:0}
+html:not(.anim) .steps{gap:24px}
+html:not(.anim) .step{grid-area:auto}
+html:not(.anim) .prog{display:none}
+
+/* moving words */
+.field{background:var(--accent);color:var(--on-accent);padding-block:clamp(56px,8vw,120px);margin-top:var(--gap-section);overflow:clip;
+  margin-left:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1 * max(16px,env(safe-area-inset-right,0px)))}
+.field p{font-size:clamp(19px,2vw,26px);line-height:1.35;max-width:36ch;margin-left:max(16px,env(safe-area-inset-left,0px))}
+.band{white-space:nowrap;font:800 clamp(88px,19vw,300px)/1 var(--font-display);letter-spacing:-0.05em;margin-top:clamp(24px,3vw,48px);padding-left:max(16px,env(safe-area-inset-left,0px));will-change:transform}
+
+/* faq */
+.faq{display:flex;flex-direction:column;gap:8px}
+details{background:var(--surface)}
+summary{cursor:pointer;list-style:none;padding:24px clamp(20px,2.6vw,36px);font:600 clamp(19px,2vw,24px)/1.25 var(--font-body);display:flex;justify-content:space-between;gap:20px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:500 30px/1 var(--font-body);color:var(--accent);transition:transform 220ms var(--ease)}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding:0 clamp(20px,2.6vw,36px) 28px;font-size:18px}
+
+/* contact + footer */
+.contact h2{max-width:16ch}
+.addr{display:block;margin-top:40px;font:800 clamp(24px,5.4vw,72px)/1 var(--font-display);letter-spacing:-0.035em;word-break:break-all;user-select:all}
+.toast{font-size:16px;min-height:1.5em;margin-top:14px;color:var(--ink-soft)}
+footer{padding-top:var(--gap-section);padding-bottom:28px;overflow:clip}
+.big{font:800 clamp(80px,24vw,360px)/0.8 var(--font-display);letter-spacing:-0.06em;margin:0 0 0 -0.04em;color:var(--surface)}
+.foot-row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:28px;font-size:15px;color:var(--ink-soft)}
+
+@keyframes rise{from{transform:translateY(22px);opacity:0}to{transform:none;opacity:1}}
+.hero-copy,.hero .site-wrap{animation:rise 700ms var(--ease) both}
+.hero-copy{animation-delay:120ms}.hero .site-wrap{animation-delay:220ms}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .hero-copy,.hero .site-wrap{animation:none}
+  .btn,summary::after,.site,.t{transition:none}
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <a class="mark" href="#top" aria-label="Codell home"><span class="glyph" aria-hidden="true"></span>Codell</a>
+    <nav aria-label="Main">
+      <a class="link" href="#build">What we build</a>
+      <a class="link" href="#process">How we work</a>
+      <a class="link" href="#faq">Questions</a>
+      <a class="btn small" href="#contact">Start a project</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" style="padding-top:clamp(36px,7vw,96px)">
+      <h1 class="split-words">Websites, built to be noticed.</h1>
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p>Codell designs and builds websites for startups and small businesses. Clear to read, quick to load, and made for your brand.</p>
+          <div class="actions">
+            <a class="btn" href="#contact">Start a project</a>
+            <a class="btn quiet" href="#process">See how we work</a>
+          </div>
+        </div>
+        <div class="site-wrap" id="hero-mock">
+          <div class="site" id="mock" data-feel="calm" data-stage="4" role="img" aria-label="Example website that changes style with the buttons below">
+            <div class="s-bar"><i></i><i></i><i></i><span>yourbrand.com</span></div>
+            <div class="s-body">
+              <div class="s-nav"><b class="t">Yourbrand</b><span class="t">About</span><span class="t">Work</span><span class="s-pill t">Contact</span></div>
+              <div class="s-hero">
+                <div class="s-title t">Your brand, in one clear line.</div>
+                <p class="t">A short sentence about what you do and who it is for.</p>
+                <span class="s-btn t">Get started</span>
+              </div>
+              <div class="s-img"></div>
+              <div class="s-badge">Live</div>
+            </div>
+          </div>
+          <div class="feel" role="group" aria-label="Pick a feel">
+            <span class="feel-label">Pick a feel</span>
+            <button class="chip" type="button" data-feel="calm" aria-pressed="true">Calm</button>
+            <button class="chip" type="button" data-feel="bold" aria-pressed="false">Bold</button>
+            <button class="chip" type="button" data-feel="playful" aria-pressed="false">Playful</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="build">
+      <div class="split">
+        <h2 class="split-words">Everything a site needs.</h2>
+        <div class="stack">
+          <div class="panel"><h3>Launch pages</h3><p>One focused page that explains what you do and gets people to act. Ready fast.</p></div>
+          <div class="panel"><h3>Business sites</h3><p>Several pages, one clear structure. Services, about, contact, and anything your customers ask for first.</p></div>
+          <div class="panel"><h3>Portfolios</h3><p>A home for your work that loads quickly and lets the pieces speak for themselves.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="process" class="process" aria-label="How we work">
+      <div class="pin">
+        <div class="p-text">
+          <h2 class="split-words">From first call to launch.</h2>
+          <div class="steps">
+            <div class="step on"><h3>Listen</h3><p>We start with your goals, your customers and the sites you admire. You do most of the talking.</p></div>
+            <div class="step"><h3>Sketch</h3><p>We lay out the pages and show you the structure before any design work begins.</p></div>
+            <div class="step"><h3>Build</h3><p>Colour, type and real words go in. You review a working site, not a flat picture.</p></div>
+            <div class="step"><h3>Launch</h3><p>We test it on phones and laptops, publish it, and stay close while it settles in.</p></div>
+          </div>
+          <div class="prog" aria-hidden="true"><i><b></b></i><i><b></b></i><i><b></b></i><i><b></b></i></div>
+        </div>
+        <div class="p-mock" id="p-mock"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="field">
+  <p>Every page is made for your business, not borrowed from someone else's.</p>
+  <div class="band" id="band" aria-hidden="true">Fast. Clear. Yours. Fast. Clear. Yours.</div>
+</div>
+
+<div class="wrap">
+  <section id="faq">
+    <div class="split">
+      <h2 class="split-words">Questions, answered plainly.</h2>
+      <div class="faq">
+        <details open><summary>What does Codell do?</summary><p>We design and build websites for startups and small businesses, from a single launch page to a full business site.</p></details>
+        <details><summary>How long does a site take?</summary><p>It depends on the size. After our first conversation we give you a clear timeline in writing.</p></details>
+        <details><summary>How much does it cost?</summary><p>We quote once we understand the project, so you know the full price before we start.</p></details>
+        <details><summary>Can you help after launch?</summary><p>Yes. Tell us what you need and we will work out the simplest way to keep your site up to date.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <h2 class="split-words">Enquire about your site now	.</h2>
+    <span class="addr" id="addr">hello.trycodell@gmail.com</span>
+    <div class="actions" style="margin-top:28px">
+      <button class="btn" id="copy" type="button">Copy address</button>
+      <a class="btn quiet" href="mailto:hello.trycodell@gmail.com?subject=A%20website%20project">Open in mail app</a>
+    </div>
+    <p class="toast" id="toast" aria-live="polite"></p>
+  </section>
+
+  <footer>
+    <p class="big" aria-hidden="true">Codell</p>
+    <div class="foot-row"><span>© 2026 Codell</span><span>hello.trycodell@gmail.com</span></div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  /* feel switcher */
+  var mock=document.getElementById('mock'),chips=[].slice.call(document.querySelectorAll('.chip'));
+  var pm=document.getElementById('p-mock');
+  chips.forEach(function(c){c.addEventListener('click',function(){
+    chips.forEach(function(x){x.setAttribute('aria-pressed',x===c)});
+    mock.dataset.feel=c.dataset.feel;
+    var p=pm.querySelector('.site');if(p)p.dataset.feel=c.dataset.feel;
+  })});
+
+  /* copy address */
+  var toast=document.getElementById('toast');
+  document.getElementById('copy').addEventListener('click',function(){
+    var a='hello.trycodell@gmail.com';
+    function done(){toast.textContent='Address copied.'}
+    function fallback(){var r=document.createRange();r.selectNodeContents(document.getElementById('addr'));var s=window.getSelection();s.removeAllRanges();s.addRange(r);toast.textContent='Address selected. Press copy on your device.'}
+    try{navigator.clipboard.writeText(a).then(done,fallback)}catch(e){fallback()}
+  });
+
+  /* the process section always shows a finished mock; scrolling rebuilds it */
+  var clone=mock.cloneNode(true);clone.id='';clone.dataset.feel=mock.dataset.feel;
+  clone.setAttribute('aria-label','Example website, shown finished');pm.appendChild(clone);
+
+  /* scroll animation, only when GSAP loaded and motion is allowed */
+  if(!window.gsap||!window.ScrollTrigger)return;
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  gsap.registerPlugin(ScrollTrigger);
+  var root=document.documentElement;root.classList.add('anim');
+  clone.dataset.stage='1';
+  clone.setAttribute('aria-label','Example website being built as you scroll');
+
+  /* split headings into words */
+  [].slice.call(document.querySelectorAll('.split-words')).forEach(function(h){
+    var words=h.textContent.trim().split(/\s+/);h.textContent='';
+    words.forEach(function(w,i){
+      var o=document.createElement('span');o.className='w';var n=document.createElement('span');n.textContent=w;o.appendChild(n);
+      h.appendChild(o);if(i<words.length-1)h.appendChild(document.createTextNode(' '));
+    });
+  });
+  var heroWords=document.querySelectorAll('.hero .w>span');
+  gsap.from(heroWords,{yPercent:110,duration:.9,ease:'expo.out',stagger:.07});
+  [].slice.call(document.querySelectorAll('.split-words')).forEach(function(h){
+    if(h.closest('.hero'))return;
+    gsap.from(h.querySelectorAll('.w>span'),{yPercent:110,duration:.9,ease:'expo.out',stagger:.07,scrollTrigger:{trigger:h,start:'top 88%',once:true}});
+  });
+
+  /* hero mock drifts slower than the page */
+  gsap.to('#hero-mock',{yPercent:-6,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
+
+  /* panels slide in */
+  [].slice.call(document.querySelectorAll('.panel')).forEach(function(p){
+    gsap.from(p,{y:48,opacity:0,duration:.8,ease:'power3.out',scrollTrigger:{trigger:p,start:'top 90%',once:true}});
+  });
+
+  /* process: scroll builds the site */
+  var steps=[].slice.call(document.querySelectorAll('.step')),bars=[].slice.call(document.querySelectorAll('.prog b'));
+  var cur=-1;
+  function setStep(i){
+    if(i===cur)return;cur=i;
+    steps.forEach(function(s,k){s.classList.toggle('on',k===i)});
+    clone.dataset.stage=String(i+1);
+  }
+  setStep(0);
+  ScrollTrigger.create({trigger:'#process',start:'top top',end:'bottom bottom',scrub:true,
+    onUpdate:function(self){
+      var p=self.progress;setStep(Math.min(3,Math.floor(p*4)));
+      bars.forEach(function(b,k){var v=Math.max(0,Math.min(1,p*4-k));b.style.transform='scaleX('+v+')'});
+    }});
+
+  /* moving words */
+  gsap.fromTo('#band',{xPercent:8},{xPercent:-48,ease:'none',scrollTrigger:{trigger:'.field',start:'top bottom',end:'bottom top',scrub:true}});
+
+  /* faq, contact, footer */
+  gsap.from('details',{y:30,opacity:0,duration:.7,ease:'power3.out',stagger:.09,scrollTrigger:{trigger:'.faq',start:'top 85%',once:true}});
+  gsap.from('#addr',{y:40,opacity:0,duration:.9,ease:'power3.out',scrollTrigger:{trigger:'#addr',start:'top 92%',once:true}});
+  gsap.from('.big',{yPercent:45,ease:'none',scrollTrigger:{trigger:'footer',start:'top bottom',end:'bottom bottom',scrub:true}});
+})();
+</script>
+
+</body></html>
